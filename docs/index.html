@@ -1,1 +1,520 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Self-Teaching for Finance — Alejandro Reynoso</title>
+  <meta name="description" content="A monumental flagship self-teaching course for Master of Finance students and financial professionals. Governance-first, four-layer architecture: books, decks, videos/podcasts, and executable Colab notebooks." />
+
+  <style>
+    :root{
+      --bg:#07080d;
+      --panel:#0f1220;
+      --panel-2:#141836;
+      --text:#eef0ff;
+      --muted:#b8bddb;
+      --border:rgba(255,255,255,0.09);
+      --accent:#7aa2ff;
+      --accent2:#6ee7c8;
+      --warn:#ffd27a;
+      --shadow:0 18px 60px rgba(0,0,0,0.45);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(122,162,255,0.18), transparent 55%),
+        radial-gradient(800px 600px at 85% 20%, rgba(110,231,200,0.12), transparent 55%),
+        radial-gradient(900px 650px at 60% 95%, rgba(255,210,122,0.07), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.6;
+    }
+
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{color:var(--accent2);text-decoration:underline;}
+
+    .container{
+      max-width:1160px;
+      margin:0 auto;
+      padding:32px 20px 84px;
+    }
+
+    .hero{
+      padding:42px 34px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(20,24,54,0.92), rgba(15,18,32,0.88));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(520px 360px at 16% 0%, rgba(122,162,255,0.18), transparent 60%),
+        radial-gradient(460px 330px at 92% 18%, rgba(110,231,200,0.10), transparent 60%),
+        radial-gradient(520px 360px at 55% 110%, rgba(255,210,122,0.08), transparent 60%);
+      pointer-events:none;
+      opacity:0.9;
+    }
+
+    .hero > *{position:relative;}
+
+    .kicker{
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero h1{
+      font-size:40px;
+      margin:12px 0 12px;
+      line-height:1.12;
+      max-width:18ch;
+      text-transform:uppercase;
+      letter-spacing:0.02em;
+    }
+
+    .subtitle{
+      margin:0;
+      max-width:96ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
+    }
+
+    .button{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      color:var(--text);
+      font-weight:700;
+      transition:transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+
+    .button:hover{
+      transform:translateY(-2px);
+      border-color:rgba(122,162,255,0.35);
+      background:rgba(20,24,54,0.86);
+      text-decoration:none;
+      color:var(--text);
+    }
+
+    .button.primary{
+      background:linear-gradient(135deg, rgba(122,162,255,0.20), rgba(110,231,200,0.12));
+      border-color:rgba(122,162,255,0.30);
+    }
+
+    .section{margin-top:56px;}
+
+    .section h2{
+      font-size:28px;
+      margin:0 0 14px;
+      letter-spacing:-0.02em;
+    }
+
+    .section p{
+      color:var(--muted);
+      max-width:96ch;
+      margin:10px 0;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+      gap:18px;
+      margin-top:22px;
+    }
+
+    .card{
+      padding:20px;
+      border-radius:18px;
+      background:rgba(20,24,54,0.72);
+      border:1px solid var(--border);
+      box-shadow:0 10px 30px rgba(0,0,0,0.30);
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:18px;
+      line-height:1.25;
+    }
+
+    .card p{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .linkcard{
+      display:block;
+      cursor:pointer;
+      transition:transform .12s ease, border-color .12s ease, background .12s ease;
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .linkcard:hover{
+      transform:translateY(-2px);
+      border-color:rgba(122,162,255,0.35);
+      background:rgba(20,24,54,0.86);
+      text-decoration:none;
+    }
+
+    .hint{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted);
+      opacity:0.92;
+      font-weight:700;
+      letter-spacing:0.02em;
+    }
+
+    .callout{
+      margin-top:18px;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid rgba(122,162,255,0.18);
+      background:linear-gradient(135deg, rgba(122,162,255,0.06), rgba(110,231,200,0.04));
+      color:var(--muted);
+      max-width:96ch;
+    }
+
+    .callout strong{color:var(--text);}
+
+    .list{
+      margin-top:18px;
+      padding-left:22px;
+      color:var(--muted);
+      max-width:96ch;
+    }
+
+    .list li{margin-bottom:12px;}
+    .list strong{color:var(--text);}
+
+    .reviewbox{
+      margin-top:18px;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid rgba(110,231,200,0.18);
+      background:linear-gradient(135deg, rgba(110,231,200,0.06), rgba(122,162,255,0.05));
+      color:var(--muted);
+      max-width:96ch;
+    }
+
+    .reviewbox strong{color:var(--text);}
+    .reviewbox hr{
+      border:0;
+      border-top:1px solid rgba(255,255,255,0.10);
+      margin:14px 0;
+    }
+
+    .quote{
+      font-style:italic;
+      color:var(--text);
+    }
+
+    .small{
+      font-size:13px;
+      color:var(--muted);
+      max-width:96ch;
+    }
+
+    .footer{
+      margin-top:80px;
+      padding-top:24px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <section class="hero">
+      <div class="kicker">Governance-first · Master of Finance · Financial professionals · Self-teaching architecture</div>
+      <h1>AI Self-Teaching for Finance</h1>
+
+      <p class="subtitle">
+        A monumental flagship course designed for Master of Finance students and financial professionals.
+        Rather than treating artificial intelligence as a clever software tool, this curriculum frames AI
+        as an industrial production system that demands disciplined capital allocation, risk management,
+        and rigorous institutional control.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="https://github.com/alexdibol/ai-self_teaching" target="_blank" rel="noopener">Open Repository</a>
+        <a class="button" href="https://github.com/alexdibol/ai-self_teaching/tree/main" target="_blank" rel="noopener">Browse Files</a>
+        <a class="button" href="https://github.com/alexdibol/ai-self_teaching/releases" target="_blank" rel="noopener">Releases</a>
+      </div>
+    </section>
+
+    <section class="section" id="overview">
+      <h2>What This Course Is</h2>
+      <p>
+        This repository hosts an integrated educational platform built from original teaching and research materials.
+        The course was not designed as a loose collection of tutorials. It was designed as a coherent intellectual
+        system for learning AI in finance at multiple levels of depth and with an uncompromising governance-first lens.
+      </p>
+      <p>
+        Its central premise is that modern AI should be understood not only as a technical capability, but as
+        institutional infrastructure. In finance, that means understanding models as part of production systems,
+        review systems, control systems, and ultimately decision systems.
+      </p>
+    </section>
+
+    <section class="section" id="architecture">
+      <h2>The Four-Layer Self-Teaching Architecture</h2>
+      <p>
+        The course distinguishes itself through a four-layer pedagogical structure designed to prevent the
+        “stall” that undermines most self-study efforts. Different learners need different entry points, and
+        different moments in professional life require different levels of depth.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Books</h3>
+          <p>Long-form conceptual depth, structured explanation, institutional framing, and cumulative understanding.</p>
+        </div>
+        <div class="card">
+          <h3>Decks</h3>
+          <p>Executive orientation, chapter scaffolding, and compact visual summaries for rapid review.</p>
+        </div>
+        <div class="card">
+          <h3>Videos and Podcasts</h3>
+          <p>Guided explanation and narrative continuity for learners who absorb best through direct exposition.</p>
+        </div>
+        <div class="card">
+          <h3>Executable Colab Notebooks</h3>
+          <p>Hands-on implementation, experimentation, and reproducible workflows that move learning from theory into practice.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Why this matters:</strong> the course is not merely multimedia. It is deliberately designed so that
+        a learner can move from conceptual study to executive synthesis to guided explanation to executable implementation
+        without losing coherence.
+      </div>
+    </section>
+
+    <section class="section" id="materials">
+      <h2>Repository Navigation</h2>
+      <p>
+        Use the repository as the central index for the course materials. Update the links below if your final folder
+        structure uses different names.
+      </p>
+
+      <div class="grid">
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching" target="_blank" rel="noopener">
+          <h3>Repository Home</h3>
+          <p>Main entry point for the complete course repository.</p>
+          <div class="hint">Open repository →</div>
+        </a>
+
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching/tree/main/books" target="_blank" rel="noopener">
+          <h3>Books</h3>
+          <p>Long-form written course materials and volume-level content.</p>
+          <div class="hint">Browse books →</div>
+        </a>
+
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching/tree/main/decks" target="_blank" rel="noopener">
+          <h3>Decks</h3>
+          <p>Slide decks for chapter review, class use, and structured summary.</p>
+          <div class="hint">Browse decks →</div>
+        </a>
+
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching/tree/main/notebooks" target="_blank" rel="noopener">
+          <h3>Notebooks</h3>
+          <p>Executable Google Colab notebooks and practical implementation labs.</p>
+          <div class="hint">Browse notebooks →</div>
+        </a>
+
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching/tree/main/videos" target="_blank" rel="noopener">
+          <h3>Videos</h3>
+          <p>Video-based guided explanations and chapter walk-throughs.</p>
+          <div class="hint">Browse videos →</div>
+        </a>
+
+        <a class="card linkcard" href="https://github.com/alexdibol/ai-self_teaching/tree/main/podcasts" target="_blank" rel="noopener">
+          <h3>Podcasts</h3>
+          <p>Audio explanations for flexible, self-paced learning.</p>
+          <div class="hint">Browse podcasts →</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="scope">
+      <h2>Curriculum Scope</h2>
+      <p>
+        Spanning six extensive volumes, the curriculum takes learners from the mechanical foundations of machine learning
+        all the way to advanced frontier systems. It is designed to serve both as a deep educational resource and as
+        an ongoing professional reference framework.
+      </p>
+
+      <ul class="list">
+        <li><strong>Foundations of machine learning:</strong> dense networks, convolutional systems, transformers, and the mechanics of modern model behavior.</li>
+        <li><strong>Reasoning and workflow design:</strong> prompt engineering, evidence control, bounded context, and structured review systems.</li>
+        <li><strong>Advanced model families:</strong> Bayesian systems, multimodal diffusion models, memory architectures, and agentic orchestration.</li>
+        <li><strong>Institutional deployment:</strong> governance, auditability, reproducibility, escalation logic, and board-reviewable artifacts.</li>
+        <li><strong>Finance-specific framing:</strong> AI as industrial infrastructure, production capability, and controlled decision support for financial institutions.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="audience">
+      <h2>Who This Is For</h2>
+      <p>
+        This course is specifically designed for learners who need more than generic AI fluency. It is intended for
+        people who must understand AI deeply enough to evaluate, structure, govern, and challenge it in finance.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Master of Finance Students</h3>
+          <p>A rigorous bridge from academic finance into the operational reality of AI-enabled institutions.</p>
+        </div>
+        <div class="card">
+          <h3>Financial Professionals</h3>
+          <p>Practical and conceptual preparation for research, risk, strategy, reporting, and institution-wide AI adoption.</p>
+        </div>
+        <div class="card">
+          <h3>Decision-Makers</h3>
+          <p>A framework for understanding not just what AI can do, but what can be defended, audited, and governed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="governance">
+      <h2>Governance-First by Design</h2>
+      <p>
+        What most clearly distinguishes this course from generic technical training is its treatment of governance as a
+        design constraint rather than a compliance afterthought. In high-stakes finance, fluent but weakly grounded model
+        output can silently contaminate analysis and decision-making.
+      </p>
+      <p>
+        This course therefore reframes AI work into a disciplined structure built around deterministic gates, bounded
+        evidence packets, explicit separation of verified facts from assumptions, and fail-closed escalation pathways.
+      </p>
+
+      <div class="callout">
+        <strong>Core objective:</strong> to help learners produce AI-assisted work that is not merely impressive, but
+        reviewable, auditable, institutionally legible, and professionally defensible.
+      </div>
+    </section>
+
+    <section class="section" id="quote">
+      <h2>External Assessment of the Course Design</h2>
+
+      <div class="reviewbox">
+        <p class="quote">
+          “This is genuinely extraordinary work. The originality claim is fully credible and significant. Most ambitious
+          curricula at this scale are assembled from curated third-party readings, licensed content, and adapted slides.
+          This course was authored from scratch — books, decks, videos, podcasts, and notebooks — all produced by a
+          single author. That is an exceptional output of intellectual labor.”
+        </p>
+
+        <hr/>
+
+        <p>
+          The external assessment also emphasized that the four-layer architecture is not a marketing feature list,
+          but a coherent pedagogical answer to a real problem: professionals learn differently, and no single medium
+          closes all the gaps.
+        </p>
+
+        <p>
+          It further highlighted the originality of framing AI as industrial infrastructure rather than just software,
+          and noted that the governance thread running across the entire curriculum reflects real institutional
+          understanding of how finance actually works.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="outcomes">
+      <h2>What Learners Should Become Capable Of</h2>
+      <p>
+        The ambition of this course is not to create passive consumers of AI tools. It is to develop professionals who
+        can understand, interrogate, and govern AI systems in real financial contexts.
+      </p>
+
+      <ul class="list">
+        <li><strong>Architects:</strong> able to design structured AI workflows and learning systems.</li>
+        <li><strong>Critics:</strong> able to distinguish plausible output from reliable output.</li>
+        <li><strong>Governors:</strong> able to impose evidence boundaries, review gates, and accountability structures.</li>
+        <li><strong>Implementers:</strong> able to move from theory into notebook-based execution and controlled experimentation.</li>
+        <li><strong>Institutional thinkers:</strong> able to interpret AI as a strategic production capability within finance.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="use">
+      <h2>How to Use This Repository</h2>
+      <p>
+        There is no single mandatory path. Learners may begin with decks for fast orientation, with books for depth,
+        with videos for guided narrative explanation, or with notebooks for immediate implementation. The full value of
+        the course, however, emerges when these layers are used together.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Orientation Path</h3>
+          <p>Start with a deck, then watch a video, then read the relevant chapter.</p>
+        </div>
+        <div class="card">
+          <h3>Implementation Path</h3>
+          <p>Begin with the notebook, then return to the written material to understand the underlying logic and controls.</p>
+        </div>
+        <div class="card">
+          <h3>Professional Reference Path</h3>
+          <p>Use the repository as an indexed platform to revisit targeted topics as institutional needs evolve.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="disclaimer">
+      <h2>Important Notes</h2>
+
+      <p class="small">
+        <strong>Educational purpose:</strong> this repository is designed as a teaching and professional development platform.
+      </p>
+
+      <p class="small">
+        <strong>Governance orientation:</strong> all AI outputs in finance should be treated as reviewable artifacts, not as self-authenticating truth.
+      </p>
+
+      <p class="small">
+        <strong>Repository structure:</strong> if your actual folders use different names or deeper nested paths, replace the placeholder links above with the final repository locations.
+      </p>
+    </section>
+
+    <footer class="footer">
+      © <span id="year"></span> Alejandro Reynoso · AI Self-Teaching for Finance
+      <br/>Hosted via GitHub repository · Governance-first self-teaching courseware
+    </footer>
+
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
